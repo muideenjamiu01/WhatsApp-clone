@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { useState } from "react";
+import "./App.css";
+import Chat from "./components/Chat/Chat";
+import Sidebar from "./components/sidebar/Sidebar";
+import { BrowserRouter,Route, Routes } from 'react-router-dom';
+import Login from "./Account/Login/Login";
+import { useStateValue } from "./StateProvider";
+// to create a react functional component use rfce
 function App() {
+  // const [user, setUser] = useState(null)
+  const [{user}, dispatch] = useStateValue()
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+       {/* if there is no user show login otherwise show the app content */}
+     {!user ? (
+      
+      <Login />
+     ) : (
+      <div className="app__body">
+    
+      <BrowserRouter>
+      <Sidebar />
+      <Routes>            
+            <Route path="/rooms/:roomId" element= {<Chat/>} />
+      </Routes>
+      <Routes>
+        <Route  path="/" element= {<Chat />} />
+      </Routes>
+        </BrowserRouter>
+      </div>
+     )}
+      
     </div>
   );
 }
